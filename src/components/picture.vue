@@ -1,140 +1,81 @@
 <template>
-  <div class="content">
-        <div class="slide" @mouseenter = 'stop()' @mouseleave = 'move()'>
-            <div class="slid-show">
-                <transition-group tag="ul" name="list">
-                    <li
-                    v-for="(item,index) in pictureItems" 
-                    :key="'a'+index" 
-                    v-show="index == mark"
-                    >
-                        <a href="#">
-                            {{index + 1}}
-                            <img :src="item.url" alt="">
-                        </a>
-                    </li>
-                </transition-group>
+    <div class="content">
+        <h2 class="picture-header">使用swiper轮播</h2>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"
+                v-for="str in listImg"
+                :key="str.id"
+                :style="{backgroundImage:'url(' + str.url + ')'}"
+                >
+                </div>
             </div>
-            <!-- 轮播按钮 -->
-            <div class="bar">
-                <div
-                class="origin-color"
-                v-for = '(btn,index) in pictureItems.length'
-                :key = 'index'
-                :class = '{mouseColor:isMouseColor == index,clickColor:isClickColor == index}'
-                @mouseenter = 'btnEnter(index)'
-                @mouseleave = 'btnLeave()'
-                @click = 'change(index)'
-                >{{index + 1}}</div>
-            </div>
+            <div class="swiper-pagination swiper-pagination-white"></div>
+            <div class="swiper-button-prev"></div>
+		    <div class="swiper-button-next"></div>
         </div>
-  </div>
+    </div>
 </template>
 <script>
+import Swiper from 'swiper';
+import 'swiper/dist/css/swiper.min.css';
 // 导入图片(从这边导入)
-import a from '../assets/logo.png';
+import bgImg from '@/assets/bg.jpg';
+import a from '@/assets/1.jpg';
+import b from '@/assets/2.jpg';
+import c from '@/assets/3.jpg';
+import d from '@/assets/4.jpg';
+import icons from '@/assets/icons.png';
 export default {
     data(){
         return {
-            // 索引mark
-            mark:0,
-            // 图片路径
-            pictureItems:[
-                {url:'http://dummyimage.com/1745x492/f1d65b'},
-                {url:'http://dummyimage.com/1745x492/40b7ea'},
-                {url:'http://dummyimage.com/1745x492/e3c933'},
-                {url:'http://dummyimage.com/1745x492/f1d65b'},
-            ],
-            // 定时器
-            timer:null,
-            // 按钮索引
-            isMouseColor:null,
-            isClickColor:0
+            listImg:[
+                {url:a},
+                {url:b},
+                {url:c},
+                {url:d}
+            ]    
         }
     },
-    methods:{
-        //  mark++
-        autoplay () {
-            this.mark ++;
-            if(this.mark == this.pictureItems.length){
-                this.mark = 0;
+    mounted () {
+        this.$nextTick(function(){
+            document.getElementsByClassName("content")[0].style.backgroundImage = 'url(' + bgImg + ')';
+        });
+        let swiper = new Swiper('.swiper-container',{
+            watchSlidesProgress: true,
+            slidesPerView: 'auto',
+            centeredSlides: true,
+            paginationClikable:true,
+            // 原本slide前后复制若干个slide
+            loop:true,
+            // 所要用到的loop个数(一般设置为本来slide的个数)
+            loopedSlides: 4,
+            speed:1000,
+            // 自动执行
+            autoplay:true,
+            // 使用前进后退按钮
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            // 获取分页器导航的容器元素 下面的小圆圈
+            pagination:{
+                el: '.swiper-pagination',
+                clickable :true,
+                renderBullet(index, className) {
+                    return '<span style="width:20px; height:20px;opacity:1;" class="' + className + '">' + (index + 1) + '</span>';
+                },
+            },
+            onTouchEnd(){
+                swiper.startAutoplay()
             }
-        },
-        //  动画停止
-        stop () {
-            clearInterval(this.timer)
-        },
-        //  动画运行
-        move () {
-            this.timer = setInterval(this.autoplay,2500)
-        },
-        //  锁定到当前索引的图片
-        change(data){
-            this.mark = data;
-            this.isClickColor = data
-        },
-        btnEnter(data){
-            this.isMouseColor = data
-        },
-        btnLeave(){
-            this.isMouseColor = null
-        }
-    },
-    created () {
-        // this.$nextTick(() => {
-        //     this.timer = setInterval(() => {
-        //         this.autoplay()
-        //     },2500)
-        // })
-        this.stop()
+        });
     }
 }
 </script>
 <style scoped>
-    .content{
-        min-height:600px;
-    }
-    .slide{
-        width:400px;
-        height:200px;
-        overflow:hidden;
-        margin:0 auto;
-        position:relative;
-    }
-    .slid-show{
-        width:1000%;
-        height:200px;
-        display:flex;
-    }
-    .slid-show li{
-        width:400px;
-    }
-    .bar{
-        width:200px;
-        height:30px;
-        position:absolute;
-        bottom:0;
-        left:100px;
-        display:flex;
-        justify-content:space-around;
-        z-index:100000;
-    }
-    .bar .origin-color{
-        width:40px;
-        height:20px;
-        background:#ccc;
-        cursor:pointer;
-    }
-    .bar .mouseColor{
-        background:rgb(151, 151, 236);
-        color:#fff;
-    }
-    .bar .clickColor{
-        background:rgb(1, 1, 238);
-        color:#fff;
-    }
     /*  轮播动画CSS */
-    .list-enter-active{
+    /* .list-enter-active{
         transform:translateX(0);
         transition:all 1.5s ease; 
     }
@@ -147,7 +88,60 @@ export default {
     }
     .list-leave{
         transform:translate(0);
+    } */
+    .picture-header{
+        margin: 20px auto;
+    }
+    .swiper-container{
+        width: 60%;
+        height: 600px;
+    }
+    .swiper-wrapper {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide {
+        background-position: center;
+        background-size: cover;
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-slide img {
+        width: 100%;
+        height: 100%;
+    }
+    .swiper-pagination-bullet {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background: #7c5e53;
+    /* }
+    .swiper-button-prev {
+        left: -30px;
+        width: 45px;
+        height: 45px;
+        background: url(icons.png) no-repeat;
+        background-position: 0 0;
+        background-size: 100%;
+    }
+    .swiper-button-prev:hover {
+        background-position: 0 -46px;
+        background-size: 100%
+    }
+    .swiper-button-next {
+        right: -30px;
+        width: 45px;
+        height: 45px;
+        background: url(/icons.png) no-repeat;
+        background-position: 0 -93px;
+        background-size: 100%;
+    }
+    .swiper-button-next:hover {
+        background-position: 0 -139px;
+        background-size: 100% */
     }
 </style>
+
+
 
  

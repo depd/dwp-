@@ -1,48 +1,95 @@
 <template>
     <div class="content">
-        <h1>本人：董伟朋</h1>
-        <h2>93年，本科（12-16）</h2>
-        <h3>从事前端工作2年（15年底-至今）</h3>
-        <h4>技术如下：</h4>
-        <ul>
-            <li v-for="item in items" :key="item.id">{{item.skill}}</li>
-        </ul>
+        <div class="home-header">
+            <h1>本人：董伟朋<span class="home-h2">93年，本科（12-16）</span></h1>
+            <h3 style="text-indent:1em;">从事前端工作2年（15年底-至今）</h3>
+            <h4 style="text-indent:3em;">技术如下：</h4>
+            <ul style="text-indent:5em;">
+                <li v-for="item in items" :key="item.id">{{item.skill}}</li>
+            </ul>
+        </div>
         <div class="canvas-circle">
-            <!-- <canvas v-for="(value,index) in canvasData" :id="value" :key="index"></canvas> -->
-            <canvas width="300px" height="300px" id="ss"></canvas>
+            <canvas 
+            v-for="(value,index) in canvasData"
+            width="200" height="200"  
+            :id="'canvas' + index" 
+            :key="index.id"
+            ></canvas>
         </div>
     </div>
 </template>
 <script>
+import bgImg from '@/assets/bg.jpg';
+let canvasData = [
+                {context:"html5",skill:"95"},
+                {context:"css3",skill:"94"},
+                {context:"jquery",skill:"93"},
+                {context:"es6",skill:"80"},
+                {context:"js",skill:"90"},
+                {context:"git",skill:"86"},
+                {context:"vue",skill:"97"},
+                {context:"小程序",skill:"60"},
+            ]
 // 角度和弧度的换算（角度换弧度）
 let lineDeg = function(deg){
     let circleDeg = 2*Math.PI*deg/360;
     return circleDeg
 };
 // 封装canvas画圆方法
-    // id: DOM的id
-    // lineColor:线的颜色
-    // startDeg:开始角度
-    // endDeg:结束角度
-    // boolen:true为逆时针 false为顺时针
-let canvasFun = function(id,lineColor,startDeg,endDeg,boolen){
-    // 获取画布canvas对象
-    let canvas = document.getElementById(id);
-    if(canvas.getContext){
-        let ctx = canvas.getContext("2d");
-        // 开始绘画路径
-        ctx.beginPath();
-        // 设置弧线的颜色
-        ctx.strokeStyle = lineColor;
-        let circle = {
-            x:100,      // 圆心的x轴坐标值
-            y:100,      // 圆心的x轴坐标值
-            r:50        // 圆的半径
-        };
-        //  以canvas中的坐标点(100,100)为圆心，绘制一个半径为50px的圆形
-        ctx.arc(circle.x,circle.y,circle.r,lineDeg(startDeg),lineDeg(endDeg),boolen);
-        //  按照指定路径绘制弧线
-        ctx.stroke();
+let canvasFun = function(arr){
+    for(let i = 0; i < arr.length; i++){
+        // 获取画布canvas对象
+        let canvas = document.getElementById('canvas' + i);
+        if(canvas.getContext){
+            let ctx = canvas.getContext("2d");
+            // 中心x坐标
+            let circleX = canvas.width/2;
+            // 中心y坐标
+            let circleY = canvas.height/2;
+            // 开始百分比
+            let process = 0;
+            // 开始绘画路径
+            ctx.beginPath();
+            // 当前线条的宽度
+            ctx.lineWidth = 10;
+            // 设置弧线的颜色
+            // ctx.strokeStyle = "red";
+            // 画灰色的圆
+            ctx.arc(circleX, circleY, 80, 0, Math.PI*2);
+            ctx.strokeStyle = '#ccc';  
+            ctx.stroke();
+            function animate(){
+                requestAnimationFrame(function(){
+                    process = process + 1;
+                    drawCricle(ctx,process);
+                    if(process < arr[i].skill){
+                        animate();
+                    }
+                })
+            };
+            function drawCricle(ctx,percent){
+                // 圆环进度
+                ctx.beginPath();
+                ctx.arc(circleX, circleY,80, Math.PI * 1.5, Math.PI * (1.5 + 2 * percent / 100 ));  
+                ctx.strokeStyle = '#ff6100';
+                ctx.stroke();   
+
+                // 画内填充圆   (主要用来覆盖下面的文字)
+                ctx.beginPath();  
+                ctx.arc(circleX, circleX, 75, 0, Math.PI * 2);  
+                ctx.fillStyle = '#fff';  
+                ctx.fill(); 
+
+                // 填充文字  
+                ctx.font = "20px Microsoft YaHei";   
+                ctx.fillStyle = '#ff6100';  
+                ctx.textAlign = 'center';    
+                ctx.textBaseline = 'middle';   
+                ctx.fillText( arr[i].context, circleX, circleY-20);
+                ctx.fillText( percent + '%', circleX, circleY+20);
+            }
+            animate();
+        }
     }
 };
 export default {
@@ -56,27 +103,57 @@ export default {
                 {skill:"会用webpack,git,node的npm"},
                 {skill:"做过一些微信小程序，链接在项目那一栏"},
             ],
-            canvasData:[
-                {context:"html5",skill:"90%"},
-                {context:"css3",skill:"90%"},
-                {context:"jquery",skill:"90%"},
-                {context:"es6",skill:"90%"},
-                {context:"js",skill:"90%"},
-                {context:"git",skill:"90%"},
-                {context:"vue",skill:"90%"},
-            ]
+            canvasData
         }
     },
     mounted () {
-        canvasFun("ss","blue",270,260,false);
+        canvasFun(canvasData);
+        this.$nextTick(function(){
+            document.getElementsByClassName("content")[0].style.backgroundImage = 'url(' + bgImg + ')';
+        });
     }
 }
 </script>
 <style>
+    html{
+        height:100%;
+    }
     .content{
-        min-height:600px;
+        min-height:800px;
         box-sizing:border-box;
         padding:20px 0;
+    }
+    .home-header{
+        width:800px;
+        height:auto;
+        margin:10px auto;
+        text-align:left;
+        padding-left:14px;
+        box-sizing:border-box;
+    }
+    .home-header h1,.home-header h3,.home-header h4,.home-header ul{
+        margin-top:10px;
+    }
+    .home-header ul li{
+        margin-top:10px;
+    }
+    .home-h2{
+        font-size:24px;
+        font-weight:bold;
+        margin-left:30px;
+    }
+    .canvas-circle{
+        margin:40px auto;
+        /* width:60%;*/
+        width:800px;
+        height:auto;
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:space-around;
+    }
+    .canvas-circle canvas{
+        width:200px;
+        height:200px;
     }
 </style>
 

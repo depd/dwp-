@@ -13,7 +13,10 @@ const routers = [
     {
         path:"/home",
         name:"home",
-        component:Home
+        component:Home,
+        meta:{
+            keepAlive:true,  // 此组件需要缓存
+        }
     },
     {
         path:"/logo",
@@ -28,7 +31,10 @@ const routers = [
     {
         path:"/picture",
         name:"picture",
-        component:Picture
+        component:Picture,
+        meta:{
+            keepAlive:true
+        }
     },
     {
         path:"/items",

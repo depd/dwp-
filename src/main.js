@@ -1,12 +1,14 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routers from './routers'
+import Vuex from 'vuex'
 import echarts from 'echarts'
 import App from './App'
+import bgImg from '@/assets/bg.jpg'
 
 Vue.use(VueRouter)
+Vue.use(Vuex)
+
 Vue.prototype.$echarts = echarts
 
 Vue.config.productionTip = false
@@ -16,7 +18,18 @@ const router = new VueRouter({
   routes: routers
 })
 
-/* eslint-disable no-new */
+const store = new Vuex.Store({
+  state:{
+    count:0
+  },
+  mutations: {
+    increase(state){
+      state.count++
+    }
+  },
+  getters:{}
+})
+
 new Vue({
   el: '#app',
   router,
@@ -24,4 +37,6 @@ new Vue({
   // components: { App },
   // template: '<App/>'
 
-})
+});
+
+export default store;  

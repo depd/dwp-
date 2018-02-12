@@ -3,7 +3,7 @@
         <div>{{footerMsg}}</div>
   </div>
 </template>
-<script>
+<script> 
     export default {
         name:"footers",
         data(){
@@ -14,10 +14,10 @@
     }   
 </script>
 <style scoped>
-    #footers{
+     #footers{
         width:100%;
         height:80px;
-        background: #27303f;
+        background: #010101;
     }
     #footers div{
         color:#ccc;
