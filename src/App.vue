@@ -80,9 +80,9 @@ export default {
         footerDiv
     },
     mounted () {                                                                                                                                                                                                                                                                                                                                             
-        this.$nextTick(function(){n 
+        this.$nextTick(function(){
             this.isChangeColor = 0; 
-            document.getElementsByClassName("conten  t")[0].style.backgroundImage = this.urls;
+            document.getElementsByClassName("content")[0].style.backgroundImage = this.urls;
         });
     }
 }

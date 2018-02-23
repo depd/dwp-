@@ -13,7 +13,10 @@
                         <td>{{itemToby.time}}</td>
                         <td>{{itemToby.adress}}</td>
                         <td class="items-tab-things">{{itemToby.somethings}}</td>
-                        <td>{{itemToby.itemUrl}}</td>
+                        <td>
+                            <a :href="itemToby.itemUrl" v-if="itemToby.itemUrl != 'null'" target="_black">{{itemToby.itemUrl}}</a>
+                            <a href="#" v-else>null</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -29,9 +32,9 @@ export default {
             itemsHrad:['时间','地点','事件','链接'],
             itemsTbody:[
                 {time:'15.11-16-6',adress:'北京',somethings:'美人贷，主要负责公司官网，产品，后台的网页，主要用jquery',itemUrl:'null'},
-                {time:'16.7-至今',adress:'北京',somethings:'乐学通，主要负责公司官网，产品，后台的网页以及合作方的页面',itemUrl:'www.400669696.com'},
-                {time:'业余时间',adress:'随地',somethings:'利用vue做一些业余网页',itemUrl:'github'},
-                {time:'业余时间',adress:'随地',somethings:'做一些小程序页面',itemUrl:'github'}
+                {time:'16.7-至今',adress:'北京',somethings:'乐学通，主要负责公司官网，产品，后台的网页以及合作方的页面',itemUrl:'http://www.4000669696.com'},
+                {time:'业余时间',adress:'随地',somethings:'利用vue做一些业余网页',itemUrl:'https://github.com/depd/dwp-'},
+                {time:'业余时间',adress:'随地',somethings:'做一些小程序页面',itemUrl:'https://github.com/depd/---'}
             ]
         }
     },
@@ -55,7 +58,7 @@ export default {
         margin-top:20px;
         width:100%;
         text-align:center;
-        color:#000;
+        color:#ff6100;
     }
     .items-exprice table th{
         padding:10px 0;
