@@ -1,9 +1,10 @@
 <template>
     <div class="content">
+        <h2 class="work-exprice">个人介绍</h2>
         <div class="home-header">
-            <h1>本人：董伟朋<span class="home-h2">93年，本科（12-16）</span></h1>
-            <h3 style="text-indent:1em;">从事前端工作2年（15年底-至今）</h3>
-            <h4 style="text-indent:3em;">技术如下：</h4>
+            <div class="font-left">姓名：董伟朋<span>93年，本科（12-16）</span></div>
+            <div class="font-left">从事前端工作2年（15年底-至今）</div>
+            <div class="font-left">技术如下：</div>
             <ul style="text-indent:5em;">
                 <li v-for="item in items" :key="item.id">{{item.skill}}</li>
             </ul>
@@ -98,7 +99,7 @@ export default {
         return {
             items:[
                 {skill:"熟练掌握html5，css3，js"},
-                {skill:"能看懂es6写的东西，但是还只是个二吊子，目前还在study"},
+                {skill:"掌握es6"},
                 {skill:"掌握vue,以及一些vue的vue-router,vuex,vue-cli"},
                 {skill:"会用webpack,git,node的npm"},
                 {skill:"做过一些微信小程序，链接在项目那一栏"},
@@ -122,6 +123,9 @@ export default {
         min-height:800px;
         box-sizing:border-box;
         padding:20px 0;
+    }
+    .font-left{
+        padding-left:10px;
     }
     .home-header{
         width:800px;
